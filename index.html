@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Utsav Bhalani — ML Reliability in Clinical Settings</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f9f7f4;
+      --surface: #ffffff;
+      --text: #1e1b18;
+      --text-secondary: #5c5652;
+      --text-muted: #8a827b;
+      --accent: #7a5c3a;
+      --accent-soft: #bfae8e;
+      --accent-wash: #efe8d8;
+      --border: #e8e2d6;
+      --shadow: rgba(30, 27, 24, 0.04);
+      --radius: 12px;
+      --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+      --font-display: 'Cormorant Garamond', Georgia, serif;
+    }
+
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      font-size: 15.5px;
+    }
+
+    ::selection {
+      background: var(--accent-wash);
+      color: var(--text);
+    }
+
+    /* Layout */
+    .page {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 110px 28px 80px;
+    }
+
+    /* Header / Hero */
+    .hero {
+      margin-bottom: 72px;
+    }
+
+    .hero-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 24px;
+      margin-bottom: 36px;
+    }
+
+    .photo-placeholder {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent-soft) 0%, var(--accent) 100%);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-family: var(--font-display);
+      font-size: 36px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      box-shadow: 0 8px 30px rgba(122, 92, 58, 0.18);
+      overflow: hidden;
+    }
+
+    .photo-placeholder img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+    .identity {
+      min-width: 0;
+    }
+
+    .identity h1 {
+      font-family: var(--font-display);
+      font-size: 2.8rem;
+      font-weight: 600;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .identity .tagline {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-size: 1.15rem;
+      color: var(--accent);
+      line-height: 1.45;
+    }
+
+    .links-row {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .links-row a {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      text-decoration: none;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 1px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .links-row a:hover {
+      color: var(--accent);
+      border-color: var(--accent-soft);
+    }
+
+    /* Bio */
+    .bio {
+      margin-bottom: 72px;
+      padding: 28px 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .bio p {
+      max-width: 640px;
+      color: var(--text-secondary);
+      line-height: 1.75;
+      font-size: 1.05rem;
+    }
+
+    .bio p + p {
+      margin-top: 14px;
+    }
+
+    .bio .accent-word {
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    /* Section headings */
+    .section-label {
+      font-family: var(--font-display);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--accent-soft);
+      margin-bottom: 32px;
+    }
+
+    /* Research cards */
+    .research-section {
+      margin-bottom: 72px;
+    }
+
+    .research-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px;
+      margin-bottom: 22px;
+      box-shadow: 0 2px 16px var(--shadow);
+      transition: box-shadow 0.25s ease;
+    }
+
+    .research-card:hover {
+      box-shadow: 0 8px 32px var(--shadow);
+    }
+
+    .research-card.tool-card {
+      border-left: 3px solid var(--accent);
+      background: linear-gradient(to right, var(--surface) 85%, var(--accent-wash) 100%);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 14px;
+    }
+
+    .card-title {
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      font-weight: 600;
+      line-height: 1.25;
+      letter-spacing: -0.015em;
+      color: var(--text);
+    }
+
+    .status-badge {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 100px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .badge-revision {
+      background: #f4e9d8;
+      color: var(--accent);
+    }
+
+    .badge-in-progress {
+      background: #edeae2;
+      color: #6b5e4e;
+    }
+
+    .badge-deployed {
+      background: #e8ebe6;
+      color: #3e4d3b;
+    }
+
+    .card-finding {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-bottom: 18px;
+    }
+
+    .card-finding em {
+      font-family: var(--font-display);
+      font-style: italic;
+      color: var(--text);
+    }
+
+    .card-links {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .card-links a {
+      font-size: 0.85rem;
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid var(--accent-soft);
+      padding-bottom: 1px;
+      transition: border-color 0.2s;
+    }
+
+    .card-links a:hover {
+      border-color: var(--accent);
+    }
+
+    /* Updates */
+    .updates-section {
+      margin-bottom: 72px;
+    }
+
+    .update-entry {
+      display: flex;
+      gap: 20px;
+      padding: 18px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .update-entry:last-child {
+      border-bottom: none;
+    }
+
+    .update-date {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      color: var(--accent);
+      min-width: 72px;
+      flex-shrink: 0;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+
+    .update-text {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      line-height: 1.55;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border);
+      padding-top: 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    footer .footer-info {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    footer .footer-info strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    footer a {
+      color: var(--text-muted);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      text-decoration-color: var(--border);
+      transition: color 0.2s;
+    }
+
+    footer a:hover {
+      color: var(--accent);
+    }
+
+    /* Small responsive */
+    @media (max-width: 640px) {
+      .page {
+        padding: 72px 20px 60px;
+      }
+
+      .hero-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+
+      .identity h1 {
+        font-size: 2.2rem;
+      }
+
+      .links-row {
+        justify-content: center;
+      }
+
+      .research-card {
+        padding: 24px 22px;
+      }
+
+      .card-header {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      footer {
+        flex-direction: column;
+        gap: 4px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+
+    <!-- Hero -->
+    <header class="hero">
+      <div class="hero-header">
+        <div class="photo-placeholder" aria-label="Photo of Utsav Bhalani">
+          <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=300&h=300&fit=crop&crop=face&q=80" alt="Utsav Bhalani portrait" onerror="this.style.display='none';this.parentElement.textContent='UB';" />
+        </div>
+        <div class="identity">
+          <h1>Utsav Bhalani</h1>
+          <p class="tagline">I study how ML systems fail under distribution shift in clinical settings.</p>
+        </div>
+      </div>
+      <nav class="links-row" aria-label="Social links">
+        <a href="https://github.com/UtsavBhalani-101" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="mailto:utsavbhalani.tech@gmail.com">utsavbhalani.tech@gmail.com</a>
+        <a href="#" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      </nav>
+    </header>
+
+    <!-- Bio -->
+    <section class="bio" aria-label="Biography">
+      <p>
+        Final-year B.Tech Information Technology student at <span class="accent-word">GH Patel College of Engineering</span>, graduating in 2027. Working on deployment reliability in medical-imaging ML — with a particular focus on how models degrade when clinical environments diverge from training conditions.
+      </p>
+      <p>
+        I approach research with a <span class="accent-word">builder instinct</span> as the forcing function and a <span class="accent-word">researcher instinct</span> as the quality control. Most of my time is spent building small, rigorous pipelines that answer a single question clearly rather than many questions poorly.
+      </p>
+    </section>
+
+    <!-- Research -->
+    <section class="research-section" aria-label="Research">
+      <h2 class="section-label">Research</h2>
+
+      <!-- Primary paper -->
+      <article class="research-card">
+        <div class="card-header">
+          <h3 class="card-title">Quantifying Representational Collapse and Uncertainty Failures in Cross-Dataset Diabetic Retinopathy Triage Pipelines</h3>
+          <span class="status-badge badge-revision">Under Revision</span>
+        </div>
+        <p class="card-finding">
+          <em>Finding:</em> Mahalanobis distance fails to predict cross-dataset degradation — shift direction in feature space predicts both the failure mode and whether uncertainty catches it.
+        </p>
+        <div class="card-links">
+          <a href="#">GitHub repo</a>
+        </div>
+      </article>
+
+      <!-- In-progress paper -->
+      <article class="research-card">
+        <div class="card-header">
+          <h3 class="card-title">Sleep Apnea Detection Under Real-World Signal Variability</h3>
+          <span class="status-badge badge-in-progress">In Progress — targeting ML4H</span>
+        </div>
+        <p class="card-finding">
+          Clinical deployability of sleep apnea detection under real-world signal variability: how sensor placement, noise profiles, and demographic drift interact with model calibration in production settings.
+        </p>
+        <div class="card-links">
+          <!-- <a href="#">GitHub repo</a> -->
+          <span style="color: var(--text-muted); font-size: 0.85rem;">Repo coming with first baseline.</span>
+        </div>
+      </article>
+
+      <!-- Tool / deployed -->
+      <article class="research-card tool-card">
+        <div class="card-header">
+          <h3 class="card-title">ProbeEngine</h3>
+          <span class="status-badge badge-deployed">Deployed</span>
+        </div>
+        <p class="card-finding">
+          Diagnostic pipeline for catching data problems before they reach the model — feature drift, label inconsistencies, and dataset shifts with interpretable failure signatures.
+        </p>
+        <div class="card-links">
+          <a href="https://probeengine.tech" target="_blank" rel="noopener noreferrer">probeengine.tech</a>
+          <a href="#">GitHub</a>
+        </div>
+      </article>
+    </section>
+
+    <!-- Updates -->
+    <section class="updates-section" aria-label="Updates">
+      <h2 class="section-label">Updates</h2>
+
+      <article class="update-entry">
+        <time class="update-date" datetime="2026-08">Aug 2026</time>
+        <p class="update-text">
+          DR grading paper under revision following peer review. Targeting resubmission.
+        </p>
+      </article>
+
+      <!-- Placeholder for future entries -->
+      <!--
+      <article class="update-entry">
+        <time class="update-date" datetime="2026-09">Sep 2026</time>
+        <p class="update-text">Next entry: Baseline results for sleep apnea project.</p>
+      </article>
+      -->
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div class="footer-info">
+        <strong>Utsav Bhalani</strong> — GH Patel College of Engineering<br>
+        <a href="mailto:utsavbhalani.tech@gmail.com">utsavbhalani.tech@gmail.com</a>
+      </div>
+    </footer>
+
+  </main>
+</body>
+</html>
